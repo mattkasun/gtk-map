@@ -28,6 +28,28 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	"unsafe"
 )
+type Source int
+
+// Tile source repositories.
+const (
+	SourceNone    Source = C.OSM_GPS_MAP_SOURCE_NULL
+	SourceDefault Source = SourceOpenStreetMap1
+	// Sources.
+	SourceOpenStreetMap1        Source = C.OSM_GPS_MAP_SOURCE_OPENSTREETMAP
+	SourceOpenStreetMap2        Source = C.OSM_GPS_MAP_SOURCE_OPENSTREETMAP_RENDERER
+	SourceOpenAerialMap         Source = C.OSM_GPS_MAP_SOURCE_OPENAERIALMAP
+	SourceMapsForFree           Source = C.OSM_GPS_MAP_SOURCE_MAPS_FOR_FREE
+	SourceOpenCycleMap          Source = C.OSM_GPS_MAP_SOURCE_OPENCYCLEMAP
+	SourcePublicTransport       Source = C.OSM_GPS_MAP_SOURCE_OSM_PUBLIC_TRANSPORT
+	SourceGoogleMaps            Source = C.OSM_GPS_MAP_SOURCE_GOOGLE_STREET
+	SourceGoogleSatellite       Source = C.OSM_GPS_MAP_SOURCE_GOOGLE_SATELLITE
+	SourceGoogleHybrid          Source = C.OSM_GPS_MAP_SOURCE_GOOGLE_HYBRID
+	SourceVirtualEarth          Source = C.OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_STREET
+	SourceVirtualEarthSatellite Source = C.OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_SATELLITE
+	SourceVirtualEarthHybrid    Source = C.OSM_GPS_MAP_SOURCE_VIRTUAL_EARTH_HYBRID
+	SourceOSMCTrails            Source = C.OSM_GPS_MAP_SOURCE_OSMC_TRAILS
+)
+
 
 // A Coordinate is a Lat, Long coordinate pair. The latitude and longitude are
 // represented in degrees.
@@ -64,6 +86,13 @@ func (m *Map) Native() *C.OsmGpsMap {
 	return (*C.OsmGpsMap)(unsafe.Pointer(m.GObject))
 }
 
+//SetSource sets map source
+func (m *Map) SetSource(source Source) (int, error) {
+	err := m.SetProperty("map-source", source)
+	newsource, err := m.GetProperty("map-source")
+	return newsource.(int), err
+}
+
 //gchar*          osm_gps_map_get_default_cache_directory (void);
 
 //void            osm_gps_map_download_maps               (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end);
@@ -77,14 +106,42 @@ func (m *Map) SetCenterAndZoom(coord Coordinate, zoom int) {
 	C.osm_gps_map_set_center_and_zoom(m.Native(), C.float(coord.Lat), C.float(coord.Long), C.int(zoom))
 }
 
-
+//Wrapper function for
 //void            osm_gps_map_set_center                  (OsmGpsMap *map, float latitude, float longitude);
+func (m *Map) SetCenter(latitude, longitude float64) {
+	C.osm_gps_map_set_center(m.Native(), C.float(latitude), C.float(longitude))
+}
+// SetZoom sets the zoom level of the map. It returns the new zoom level, which
+// may differ if zoom was below the min or above the max zoom level of the
+// current source.
 //int             osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);
+func (m *Map) SetZoom (zoom int) int {
+	return int(C.osm_gps_map_set_zoom(m.Native(), C.int(zoom)))
+}
+
 //void            osm_gps_map_set_zoom_offset             (OsmGpsMap *map, int zoom_offset);
+
+
+// ZoomIn increases the zoom level by one. It returns the new zoom level.
 //int             osm_gps_map_zoom_in                     (OsmGpsMap *map);
+func (m *Map) ZoomIn() int {
+	return int(C.osm_gps_map_zoom_in(m.Native()))
+}
+
+// ZoomOut decreases the zoom level by one. It returns the new zoom level.
 //int             osm_gps_map_zoom_out                    (OsmGpsMap *map);
+func (m *Map) ZoomOut() int {
+	return int(C.osm_gps_map_zoom_out(m.Native()))
+}
+
 //void            osm_gps_map_scroll                      (OsmGpsMap *map, gint dx, gint dy);
+
+// GetScale returns the scale at the center of the map, in meters/pixel.
 //float           osm_gps_map_get_scale                   (OsmGpsMap *map);
+func (m *Map) Scale() float64 {
+	return float64(C.osm_gps_map_get_scale(m.Native()))
+}
+
 //void            osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 //void            osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
 //void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
@@ -104,6 +161,7 @@ func (m *Map) SetCenterAndZoom(coord Coordinate, zoom int) {
 //void            osm_gps_map_layer_add                   (OsmGpsMap *map, OsmGpsMapLayer *layer);
 //gboolean        osm_gps_map_layer_remove                (OsmGpsMap *map, OsmGpsMapLayer *layer);
 //void            osm_gps_map_layer_remove_all            (OsmGpsMap *map);
+
 //void            osm_gps_map_convert_screen_to_geographic(OsmGpsMap *map, gint pixel_x, gint pixel_y, OsmGpsMapPoint *pt);
 //void            osm_gps_map_convert_geographic_to_screen(OsmGpsMap *map, OsmGpsMapPoint *pt, gint *pixel_x, gint *pixel_y);
 //OsmGpsMapPoint *osm_gps_map_get_event_location          (OsmGpsMap *map, GdkEventButton *event);
