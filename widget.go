@@ -50,21 +50,6 @@ const (
 	SourceOSMCTrails            Source = C.OSM_GPS_MAP_SOURCE_OSMC_TRAILS
 )
 
-
-// A Coordinate is a Lat, Long coordinate pair. The latitude and longitude are
-// represented in degrees.
-type Coordinate struct {
-	// Latitude.
-	Lat float64
-	// Longitude.
-	Long float64
-}
-
-// Coord is shorthand for Coordinate{lat, long}.
-func Coord(lat, long float64) Coordinate {
-	return Coordinate{lat, long}
-}
-
 type Map struct {
 	gtk.Widget 
 }
@@ -86,12 +71,8 @@ func (m *Map) Native() *C.OsmGpsMap {
 	return (*C.OsmGpsMap)(unsafe.Pointer(m.GObject))
 }
 
-//SetSource sets map source
-func (m *Map) SetSource(source Source) (int, error) {
-	err := m.SetProperty("map-source", source)
-	newsource, err := m.GetProperty("map-source")
-	return newsource.(int), err
-}
+//use m.SetProperty("map-source", Source) to set map source
+
 
 //gchar*          osm_gps_map_get_default_cache_directory (void);
 
@@ -102,8 +83,8 @@ func (m *Map) SetSource(source Source) (int, error) {
 
 //Wrapper function for
 //void            osm_gps_map_set_center_and_zoom         (OsmGpsMap *map, float latitude, float longitude, int zoom);
-func (m *Map) SetCenterAndZoom(coord Coordinate, zoom int) {
-	C.osm_gps_map_set_center_and_zoom(m.Native(), C.float(coord.Lat), C.float(coord.Long), C.int(zoom))
+func (m *Map) SetCenterAndZoom(lat float64, lng float64, zoom int) {
+	C.osm_gps_map_set_center_and_zoom(m.Native(), C.float(lat), C.float(lng), C.int(zoom))
 }
 
 //Wrapper function for
