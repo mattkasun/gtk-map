@@ -140,6 +140,10 @@ func (m *Map) Scale() float64 {
 //gboolean        osm_gps_map_image_remove                (OsmGpsMap *map, OsmGpsMapImage *image);
 //void            osm_gps_map_image_remove_all            (OsmGpsMap *map);
 //void            osm_gps_map_layer_add                   (OsmGpsMap *map, OsmGpsMapLayer *layer);
+func (m *Map) LayerAdd (o *Osd) () {
+	
+	C.osm_gps_map_layer_add(m.Native(),o.ToLayer())
+}
 //gboolean        osm_gps_map_layer_remove                (OsmGpsMap *map, OsmGpsMapLayer *layer);
 //void            osm_gps_map_layer_remove_all            (OsmGpsMap *map);
 
