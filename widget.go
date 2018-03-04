@@ -132,9 +132,25 @@ func (m *Map) TrackAdd (t *Track) {
 
 //void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
 //gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
+
 //void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+func (m *Map) PolygonAdd (p *Polygon) {
+	C.osm_gps_map_polygon_add(m.Native(), p.Native())
+}
+
 //void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
+func (m *Map) PolygonRemoveAll () {
+	C.osm_gps_map_polygon_remove_all(m.Native())
+}
+
 //gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+func (m *Map) PolygonRemove (p *Polygon) bool {
+	result := (C.osm_gps_map_polygon_remove(m.Native(), p.Native()))
+	if result == 0 {
+		return false
+	}
+	return true
+}
 
 //void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
 func (m *Map) GpsAdd (latitude, longitude, heading float64) {
