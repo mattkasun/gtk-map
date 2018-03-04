@@ -130,8 +130,17 @@ func (m *Map) Scale() float64 {
 //void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
 //void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
 //gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
+
 //void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
+func (m *Map) GpsAdd (latitude, longitude, heading float64) {
+	C.osm_gps_map_gps_add(m.Native(), (C.float)(latitude), (C.float)(longitude), (C.float)(heading))
+}
+
 //void            osm_gps_map_gps_clear                   (OsmGpsMap *map);
+func (m *Map) GpsClear () {
+	C.osm_gps_map_gps_clear(m.Native())
+}
+
 //OsmGpsMapTrack *osm_gps_map_gps_get_track               (OsmGpsMap *map);
 //OsmGpsMapImage *osm_gps_map_image_add                   (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image);
 //OsmGpsMapImage *osm_gps_map_image_add_z                 (OsmGpsMap *map, float latitude, float longitude, GdkPixbuf *image, gint zorder);
