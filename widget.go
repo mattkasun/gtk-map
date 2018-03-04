@@ -124,7 +124,12 @@ func (m *Map) Scale() float64 {
 }
 
 //void            osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
+
 //void            osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
+func (m *Map) TrackAdd (t *Track) {
+	C.osm_gps_map_track_add(m.Native(), t.Native())
+}
+
 //void            osm_gps_map_track_remove_all            (OsmGpsMap *map);
 //gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
 //void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
