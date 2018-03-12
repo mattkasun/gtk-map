@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"github.com/gotk3/gotk3/gtk"
 	gtkmap "github.com/mattkasun/gtk-map"
+	"log"
 )
 
 func main() {
 	//initalize gtk
 	gtk.Init(nil)
-	//create map widget 
+	//create map widget
 	m, err := gtkmap.MapNew()
 	if err != nil {
 		log.Fatal(err)
@@ -31,10 +31,9 @@ func main() {
 	t.AddPoint(p3)
 	m.TrackAdd(t)
 
-	t.SetProperty ("editable", true)
+	t.SetProperty("editable", true)
 	//create and pack containters
 	box1, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 0)
-
 
 	//pack top box
 	box1.PackStart(m, true, true, 0)
@@ -47,7 +46,7 @@ func main() {
 
 	//start
 	window.Add(box1)
-	window.SetDefaultSize(400,400)
+	window.SetDefaultSize(400, 400)
 	window.ShowAll()
 
 	gtk.Main()

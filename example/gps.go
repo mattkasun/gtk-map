@@ -2,25 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"time"
-	"math/rand"
-	"github.com/gotk3/gotk3/gtk"
 	"github.com/gotk3/gotk3/glib"
+	"github.com/gotk3/gotk3/gtk"
 	gtkmap "github.com/mattkasun/gtk-map"
+	"log"
+	"math/rand"
+	"time"
 )
 
 var (
-	m	*gtkmap.Map
-	entry	*gtk.Entry
-	entry2	*gtk.Entry
-
+	m      *gtkmap.Map
+	entry  *gtk.Entry
+	entry2 *gtk.Entry
 )
 
 func main() {
 	//initalize gtk
 	gtk.Init(nil)
-	//create map widget 
+	//create map widget
 	m, err := gtkmap.MapNew()
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +30,7 @@ func main() {
 	}
 	m.SetCenterAndZoom(45.18, -75.93, 10)
 
-	osd :=gtkmap.OsdNewFull(true, true, true, true, true, false, false, false, 30.5)
+	osd := gtkmap.OsdNewFull(true, true, true, true, true, false, false, false, 30.5)
 	m.LayerAdd(osd)
 	// add gps point
 	lat := 45.0
@@ -41,7 +40,6 @@ func main() {
 
 	//create and pack containters
 	box1, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 0)
-
 
 	//pack top box
 	box1.PackStart(m, true, true, 0)
@@ -53,21 +51,21 @@ func main() {
 	})
 
 	//periodic function to clear and update positionss
-	go func () {
+	go func() {
 		for {
 			time.Sleep(time.Second)
 			m.GpsClear()
 			time.Sleep(time.Second)
 			lat := lat + rand.Float64()
 			lng := lng + rand.Float64()
-			head:= head + rand.Float64()
-			m.GpsAdd(lat,lng,head)
-			}
+			head := head + rand.Float64()
+			m.GpsAdd(lat, lng, head)
+		}
 	}()
 
 	//start
 	window.Add(box1)
-	window.SetDefaultSize(400,400)
+	window.SetDefaultSize(400, 400)
 	window.ShowAll()
 
 	gtk.Main()

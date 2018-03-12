@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"github.com/gotk3/gotk3/gtk"
 	gtkmap "github.com/mattkasun/gtk-map"
+	"log"
 )
 
 func main() {
 	//initalize gtk
 	gtk.Init(nil)
-	//create map widget 
+	//create map widget
 	m, err := gtkmap.MapNew()
 	if err != nil {
 		log.Fatal(err)
@@ -42,11 +42,7 @@ func main() {
 	t.AddPoint(p3)
 	m.PolygonAdd(poly2)
 
-
-
-
-	poly.SetProperty ("editable", true)
-
+	poly.SetProperty("editable", true)
 
 	box1, _ := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 0)
 	but1, _ := gtk.ButtonNewWithLabel("Remove polygon")
@@ -58,13 +54,13 @@ func main() {
 	box1.PackStart(but2, false, false, 0)
 	box1.PackStart(but3, false, false, 0)
 
-	but1.Connect ("clicked", func () {
+	but1.Connect("clicked", func() {
 		_ = m.PolygonRemove(poly2)
 	})
-	but2.Connect ("clicked", func () {
+	but2.Connect("clicked", func() {
 		m.PolygonAdd(poly2)
 	})
-	but3.Connect ("clicked", func() {
+	but3.Connect("clicked", func() {
 		m.PolygonRemoveAll()
 	})
 
@@ -74,10 +70,9 @@ func main() {
 		gtk.MainQuit()
 	})
 
-
 	//start
 	window.Add(box1)
-	window.SetDefaultSize(800,400)
+	window.SetDefaultSize(800, 400)
 	window.ShowAll()
 
 	gtk.Main()

@@ -29,27 +29,23 @@ import (
 	"unsafe"
 )
 
-type Osd struct{
-	gtk.Widget	
+type Osd struct {
+	gtk.Widget
 }
-
-
-
-
 
 //GType               osm_gps_map_osd_get_type (void);
 //OsmGpsMapOsd*       osm_gps_map_osd_new      (void_);
 //func OsdNew() *OsmGpsMapOsd {
-func OsdNew() *Osd{
+func OsdNew() *Osd {
 	c := C.osm_gps_map_osd_new()
-	obj := glib.Take(unsafe.Pointer (c))
+	obj := glib.Take(unsafe.Pointer(c))
 	widget := &Osd{gtk.Widget{glib.InitiallyUnowned{obj}}}
 	return widget
 }
 
 func OsdNewFull(scale, coords, crosshair, dpad, zoom, gpsindpad, gpsinzoom, copywright bool, radius float64) *Osd {
 	c := C.osm_gps_map_osd_new()
-	obj := glib.Take(unsafe.Pointer (c))
+	obj := glib.Take(unsafe.Pointer(c))
 	widget := &Osd{gtk.Widget{glib.InitiallyUnowned{obj}}}
 	if scale {
 		widget.SetProperty("show-scale", true)
@@ -64,7 +60,7 @@ func OsdNewFull(scale, coords, crosshair, dpad, zoom, gpsindpad, gpsinzoom, copy
 		widget.SetProperty("show-dpad", true)
 	}
 	if zoom {
-		widget.SetProperty("show-zoom",true)
+		widget.SetProperty("show-zoom", true)
 	}
 	if gpsindpad {
 		widget.SetProperty("show-gps-in-dpad", true)
@@ -80,13 +76,12 @@ func OsdNewFull(scale, coords, crosshair, dpad, zoom, gpsindpad, gpsinzoom, copy
 	return widget
 }
 
-func (o *Osd) Native () *C.OsmGpsMapOsd {
-	osd := (*C.OsmGpsMapOsd) (unsafe.Pointer(o.GObject))
+func (o *Osd) Native() *C.OsmGpsMapOsd {
+	osd := (*C.OsmGpsMapOsd)(unsafe.Pointer(o.GObject))
 	return osd
 }
 
-func (o *Osd) ToLayer () *C.OsmGpsMapLayer {
-	osd := (*C.OsmGpsMapLayer) (unsafe.Pointer(o.GObject))
+func (o *Osd) ToLayer() *C.OsmGpsMapLayer {
+	osd := (*C.OsmGpsMapLayer)(unsafe.Pointer(o.GObject))
 	return osd
 }
-	

@@ -13,7 +13,7 @@
 // ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 // WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 // ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
- // OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 package gtkmap
 
@@ -28,6 +28,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	"unsafe"
 )
+
 type Track struct {
 	gtk.Widget
 }
@@ -35,13 +36,13 @@ type Track struct {
 //OsmGpsMapTrack *    osm_gps_map_track_new           (void);
 func TrackNew() *Track {
 	c := C.osm_gps_map_track_new()
-	obj := glib.Take(unsafe.Pointer (c))
+	obj := glib.Take(unsafe.Pointer(c))
 	widget := &Track{gtk.Widget{glib.InitiallyUnowned{obj}}}
 	return widget
 }
 
-func (t *Track) Native () *C.OsmGpsMapTrack {
-	return( (*C.OsmGpsMapTrack) (unsafe.Pointer(t.GObject)))
+func (t *Track) Native() *C.OsmGpsMapTrack {
+	return ((*C.OsmGpsMapTrack)(unsafe.Pointer(t.GObject)))
 }
 
 /**
@@ -50,10 +51,10 @@ func (t *Track) Native () *C.OsmGpsMapTrack {
  * @point: (in): point to add
  *
  * Since: 0.7.0
- **/ 
+ **/
 //void                osm_gps_map_track_add_point     (OsmGpsMapTrack *track, const OsmGpsMapPoint *point);
-func (t *Track) AddPoint (p *Point) {
-	C.osm_gps_map_track_add_point (t.Native(), p.Native())
+func (t *Track) AddPoint(p *Point) {
+	C.osm_gps_map_track_add_point(t.Native(), p.Native())
 }
 
 /**
@@ -101,4 +102,3 @@ func (t *Track) AddPoint (p *Point) {
  * Returns: a #OsmGpsMapPoint
  **/
 //OsmGpsMapPoint*     osm_gps_map_track_get_point(OsmGpsMapTrack* track, int pos);
-

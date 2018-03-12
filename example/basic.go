@@ -2,24 +2,23 @@ package main
 
 import (
 	"fmt"
+	"github.com/gotk3/gotk3/glib"
+	"github.com/gotk3/gotk3/gtk"
+	gtkmap "github.com/mattkasun/gtk-map"
 	"log"
 	"time"
-	"github.com/gotk3/gotk3/gtk"
-	"github.com/gotk3/gotk3/glib"
-	gtkmap "github.com/mattkasun/gtk-map"
 )
 
 var (
-	m	*gtkmap.Map
-	entry	*gtk.Entry
-	entry2	*gtk.Entry
-
+	m      *gtkmap.Map
+	entry  *gtk.Entry
+	entry2 *gtk.Entry
 )
 
 func main() {
 	//initalize gtk
 	gtk.Init(nil)
-	//create map widget 
+	//create map widget
 	m, err := gtkmap.MapNew()
 	if err != nil {
 		log.Fatal(err)
@@ -33,7 +32,7 @@ func main() {
 	//radio buttons for changing map source
 	radio1, _ := gtk.RadioButtonNewWithLabel(nil, "OpenStreetMap")
 	radio2, _ := gtk.RadioButtonNewWithLabelFromWidget(radio1, "Google Hybrid")
-	
+
 	//entrys for display zoom, map center and instructions
 	entry, _ = gtk.EntryNew()
 	entry.SetText(fmt.Sprint("Zoom Level 10"))
@@ -76,13 +75,13 @@ func main() {
 	})
 
 	//periodic function to update zoom level and map center indicators
-	go func () {
+	go func() {
 		for {
 			time.Sleep(time.Second)
 			zoom, _ := m.GetProperty("zoom")
-			s := fmt.Sprint("Zoom Level " , zoom)
+			s := fmt.Sprint("Zoom Level ", zoom)
 			_, err := glib.IdleAdd(entry.SetText, s)
-			if err !=nil {
+			if err != nil {
 				log.Fatal("idle add failed: ", err)
 			}
 			lat, _ := m.GetProperty("latitude")
@@ -97,7 +96,7 @@ func main() {
 
 	//start
 	window.Add(box1)
-	window.SetDefaultSize(400,400)
+	window.SetDefaultSize(400, 400)
 	window.ShowAll()
 
 	gtk.Main()

@@ -28,6 +28,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	"unsafe"
 )
+
 type Source int
 
 // Tile source repositories.
@@ -51,7 +52,7 @@ const (
 )
 
 type Map struct {
-	gtk.Widget 
+	gtk.Widget
 }
 
 //Wraper function for
@@ -73,7 +74,6 @@ func (m *Map) Native() *C.OsmGpsMap {
 
 //use m.SetProperty("map-source", Source) to set map source
 
-
 //gchar*          osm_gps_map_get_default_cache_directory (void);
 
 //void            osm_gps_map_download_maps               (OsmGpsMap *map, OsmGpsMapPoint *pt1, OsmGpsMapPoint *pt2, int zoom_start, int zoom_end);
@@ -92,16 +92,16 @@ func (m *Map) SetCenterAndZoom(lat float64, lng float64, zoom int) {
 func (m *Map) SetCenter(latitude, longitude float64) {
 	C.osm_gps_map_set_center(m.Native(), C.float(latitude), C.float(longitude))
 }
+
 // SetZoom sets the zoom level of the map. It returns the new zoom level, which
 // may differ if zoom was below the min or above the max zoom level of the
 // current source.
 //int             osm_gps_map_set_zoom                    (OsmGpsMap *map, int zoom);
-func (m *Map) SetZoom (zoom int) int {
+func (m *Map) SetZoom(zoom int) int {
 	return int(C.osm_gps_map_set_zoom(m.Native(), C.int(zoom)))
 }
 
 //void            osm_gps_map_set_zoom_offset             (OsmGpsMap *map, int zoom_offset);
-
 
 // ZoomIn increases the zoom level by one. It returns the new zoom level.
 //int             osm_gps_map_zoom_in                     (OsmGpsMap *map);
@@ -126,7 +126,7 @@ func (m *Map) Scale() float64 {
 //void            osm_gps_map_set_keyboard_shortcut       (OsmGpsMap *map, OsmGpsMapKey_t key, guint keyval);
 
 //void            osm_gps_map_track_add                   (OsmGpsMap *map, OsmGpsMapTrack *track);
-func (m *Map) TrackAdd (t *Track) {
+func (m *Map) TrackAdd(t *Track) {
 	C.osm_gps_map_track_add(m.Native(), t.Native())
 }
 
@@ -134,17 +134,17 @@ func (m *Map) TrackAdd (t *Track) {
 //gboolean        osm_gps_map_track_remove                (OsmGpsMap *map, OsmGpsMapTrack *track);
 
 //void            osm_gps_map_polygon_add                 (OsmGpsMap *map, OsmGpsMapPolygon *poly);
-func (m *Map) PolygonAdd (p *Polygon) {
+func (m *Map) PolygonAdd(p *Polygon) {
 	C.osm_gps_map_polygon_add(m.Native(), p.Native())
 }
 
 //void            osm_gps_map_polygon_remove_all          (OsmGpsMap *map);
-func (m *Map) PolygonRemoveAll () {
+func (m *Map) PolygonRemoveAll() {
 	C.osm_gps_map_polygon_remove_all(m.Native())
 }
 
 //gboolean        osm_gps_map_polygon_remove                (OsmGpsMap *map, OsmGpsMapPolygon *poly);
-func (m *Map) PolygonRemove (p *Polygon) bool {
+func (m *Map) PolygonRemove(p *Polygon) bool {
 	result := (C.osm_gps_map_polygon_remove(m.Native(), p.Native()))
 	if result == 0 {
 		return false
@@ -153,12 +153,12 @@ func (m *Map) PolygonRemove (p *Polygon) bool {
 }
 
 //void            osm_gps_map_gps_add                     (OsmGpsMap *map, float latitude, float longitude, float heading);
-func (m *Map) GpsAdd (latitude, longitude, heading float64) {
+func (m *Map) GpsAdd(latitude, longitude, heading float64) {
 	C.osm_gps_map_gps_add(m.Native(), (C.float)(latitude), (C.float)(longitude), (C.float)(heading))
 }
 
 //void            osm_gps_map_gps_clear                   (OsmGpsMap *map);
-func (m *Map) GpsClear () {
+func (m *Map) GpsClear() {
 	C.osm_gps_map_gps_clear(m.Native())
 }
 
@@ -170,10 +170,11 @@ func (m *Map) GpsClear () {
 //gboolean        osm_gps_map_image_remove                (OsmGpsMap *map, OsmGpsMapImage *image);
 //void            osm_gps_map_image_remove_all            (OsmGpsMap *map);
 //void            osm_gps_map_layer_add                   (OsmGpsMap *map, OsmGpsMapLayer *layer);
-func (m *Map) LayerAdd (o *Osd) () {
-	
-	C.osm_gps_map_layer_add(m.Native(),o.ToLayer())
+func (m *Map) LayerAdd(o *Osd) {
+
+	C.osm_gps_map_layer_add(m.Native(), o.ToLayer())
 }
+
 //gboolean        osm_gps_map_layer_remove                (OsmGpsMap *map, OsmGpsMapLayer *layer);
 //void            osm_gps_map_layer_remove_all            (OsmGpsMap *map);
 
@@ -182,4 +183,3 @@ func (m *Map) LayerAdd (o *Osd) () {
 //OsmGpsMapPoint *osm_gps_map_get_event_location          (OsmGpsMap *map, GdkEventButton *event);
 //gboolean        osm_gps_map_map_redraw                  (OsmGpsMap *map);
 //void            osm_gps_map_map_redraw_idle             (OsmGpsMap *map);
-

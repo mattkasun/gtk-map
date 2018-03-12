@@ -26,28 +26,26 @@ import (
 	"math"
 )
 
-type Point struct{
-	rlat float64;
-	rlng float64;	
+type Point struct {
+	rlat float64
+	rlng float64
 }
 
-func PointNew (lat, lng float64) *Point {
+func PointNew(lat, lng float64) *Point {
 	var p Point
 	p.rlat = lat
 	p.rlng = lng
 	return &p
 }
 
-func PointNewDegress (lat, lng float64) *Point {
+func PointNewDegress(lat, lng float64) *Point {
 	var p Point
 	p.rlat = (lat * math.Pi / 180.0)
 	p.rlng = (lng * math.Pi / 180.0)
 	return &p
 }
 
-func (p *Point) Native () *C.OsmGpsMapPoint {
+func (p *Point) Native() *C.OsmGpsMapPoint {
 	c := C.osm_gps_map_point_new_radians((C.float)(p.rlat), (C.float)(p.rlng))
 	return c
 }
-
-

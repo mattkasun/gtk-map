@@ -23,9 +23,9 @@ package gtkmap
 // #include <osm-gps-map.h>
 import "C"
 import (
-	"unsafe"
-	"github.com/gotk3/gotk3/gtk"
 	"github.com/gotk3/gotk3/glib"
+	"github.com/gotk3/gotk3/gtk"
+	"unsafe"
 )
 
 type Polygon struct {
@@ -35,15 +35,14 @@ type Polygon struct {
 //OsmGpsMapPolygon*		osm_gps_map_polygon_new           (void);
 func PolygonNew() *Polygon {
 	c := C.osm_gps_map_polygon_new()
-	obj := glib.Take(unsafe.Pointer (c))
+	obj := glib.Take(unsafe.Pointer(c))
 	widget := &Polygon{gtk.Widget{glib.InitiallyUnowned{obj}}}
 	return widget
 }
 
-func (t *Polygon) Native () *C.OsmGpsMapPolygon {
-	return( (*C.OsmGpsMapPolygon) (unsafe.Pointer(t.GObject)))
+func (t *Polygon) Native() *C.OsmGpsMapPolygon {
+	return ((*C.OsmGpsMapPolygon)(unsafe.Pointer(t.GObject)))
 }
-
 
 /**
  * osm_gps_map_polygon_get_track:
@@ -52,9 +51,9 @@ func (t *Polygon) Native () *C.OsmGpsMapPolygon {
  * Returns: (transfer none): The #OsmGpsMapTrack of the polygon
  **/
 //OsmGpsMapTrack*			osm_gps_map_polygon_get_track(OsmGpsMapPolygon* poly);
-func (p *Polygon) GetTrack () (*Track) {
+func (p *Polygon) GetTrack() *Track {
 	t := C.osm_gps_map_polygon_get_track(p.Native())
-	obj := glib.Take(unsafe.Pointer (t))
+	obj := glib.Take(unsafe.Pointer(t))
 	widget := &Track{gtk.Widget{glib.InitiallyUnowned{obj}}}
 	return widget
 }
